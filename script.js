@@ -5,10 +5,6 @@
       let current = 0;
       let cardEls = [];
 
-      // Build each card ONCE and keep it in the DOM permanently.
-      // Only its position/scale/opacity gets updated on every move,
-      // so the CSS transition animates it sliding/rotating into place
-      // instead of the whole deck being torn down and rebuilt.
       function buildCards(){
         projects.forEach((p, i) => {
           const card = document.createElement('div');
