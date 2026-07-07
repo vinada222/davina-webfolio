@@ -101,8 +101,8 @@
     // IMAGE SLOTS: 3 best logos
     initProjectSlider('projectTrack3', 'prevArrow3', 'nextArrow3', [
       { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "/photos/Gailcast.png" },
-      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "/photos/CSSLOGOORG.png" },
-      { title: "Good Buoy", desc: "Pinnacle Pioneer's", img: "/photos/GoodBuoy.png" }
+      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "/photos/CSSLOGOORG.jpg" },
+      { title: "Good Buoy", desc: "Pinnacle Pioneer's Logo for their Proposed Research Project", img: "/photos/GoodB.png" }
     ]);
 
    
@@ -137,7 +137,7 @@
       const loaderEl = document.getElementById('pageLoader');
       if (!loaderEl) return;
 
-      const minDisplayTime = 5000; // ms — always shown at least this long
+      const minDisplayTime = 3000; // ms — always shown at least this long
       const shownAt = Date.now();
 
       function hideLoader(){

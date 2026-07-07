@@ -649,6 +649,12 @@
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 18px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .proj-card-static:hover{
+    transform: translateY(-5px);
+    border-color: rgba(168,85,247,0.55);
+    box-shadow: 0 22px 44px -14px rgba(111,56,185,0.75);
   }
   .proj-thumb-large{
     width: 100%;
