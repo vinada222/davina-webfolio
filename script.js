@@ -85,23 +85,27 @@
       updatePositions();
     }
 
-    // IMAGE SLOTS: School Organization Works — replace each "img" path with the real project image
+    // IMAGE SLOTS: School Organization Works
     initProjectSlider('projectTrack', 'prevArrow', 'nextArrow', [
-      { title: "Project 1", desc: "Short description of the project", img: "images/projects/school-project-1.jpg" },
-      { title: "Project 2", desc: "Short description of the project", img: "images/projects/school-project-2.jpg" },
-      { title: "Project 3", desc: "Short description of the project", img: "images/projects/school-project-3.jpg" }
+      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "/photos/CSS%20ORG.png" },
+      { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display.", img: "/photos/PlacidoPenitente.jpg" },
     ]);
 
-    // IMAGE SLOTS: GD Internship Works — replace each "img" path with the real project image
+    // IMAGE SLOTS: GD Internship Works
     initProjectSlider('projectTrack2', 'prevArrow2', 'nextArrow2', [
-      { title: "Project 1", desc: "Short description of the project", img: "images/projects/gd-internship-1.jpg" },
-      { title: "Project 2", desc: "Short description of the project", img: "images/projects/gd-internship-2.jpg" },
-      { title: "Project 3", desc: "Short description of the project", img: "images/projects/gd-internship-3.jpg" }
+      { title: "Neosense Integrated Solutions", desc: "Design graphics focusing on advertisements for social media that the company specializes in cutting-edge security systems and advanced timekeeping solutions.", img: "/photos/Scene%201.png" },
+      { title: "J.KOpi", desc: "Design for social media posts, carousels, and stories for a social media marketing agency, creating strong brand identity and advertising.", img: "/photos/JKopi%20Thumbnail.png" },
+      { title: "Beauty Pout", desc: "Advertising graphics on launching their lip cosmetic products and creating special promos, tutorials, and photoshoots.", img: "/photos/BeautyPout.png" }
     ]);
 
-    // Nav <-> section sync: clicking a link instantly highlights it,
-    // and scrolling manually keeps the highlight in sync with whichever
-    // section is currently in view.
+    // IMAGE SLOTS: 3 best logos
+    initProjectSlider('projectTrack3', 'prevArrow3', 'nextArrow3', [
+      { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "/photos/Gailcast.png" },
+      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "/photos/CSSLOGOORG.png" },
+      { title: "Good Buoy", desc: "Pinnacle Pioneer's", img: "/photos/GoodBuoy.png" }
+    ]);
+
+   
     const navLinks = document.querySelectorAll('nav a[data-target]');
     const navSections = ['home', 'projects', 'skills', 'contact']
       .map(id => document.getElementById(id))
