@@ -98,9 +98,14 @@
       { title: "Beauty Pout", desc: "Advertising graphics on launching their lip cosmetic products and creating special promos, tutorials, and photoshoots.", img: "/photos/BeautyPout.png" }
     ]);
 
-    // Nav <-> section sync: clicking a link instantly highlights it,
-    // and scrolling manually keeps the highlight in sync with whichever
-    // section is currently in view.
+    // IMAGE SLOTS: 3 best logos
+    initProjectSlider('projectTrack3', 'prevArrow3', 'nextArrow3', [
+      { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "/photos/Gailcast.png" },
+      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "/photos/CSSLOGOORG.png" },
+      { title: "Good Buoy", desc: "Pinnacle Pioneer's", img: "/photos/GoodBuoy.png" }
+    ]);
+
+   
     const navLinks = document.querySelectorAll('nav a[data-target]');
     const navSections = ['home', 'projects', 'skills', 'contact']
       .map(id => document.getElementById(id))
