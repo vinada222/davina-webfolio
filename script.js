@@ -9,16 +9,18 @@
         projects.forEach((p, i) => {
           const card = document.createElement('div');
           card.className = 'proj-card';
+          card.dataset.url = p.url || '';
           card.innerHTML = `
             <img class="proj-thumb" src="${p.img}" alt="${p.title}">
             <h4>${p.title.toUpperCase()}</h4>
             <p>${p.desc}</p>
-            <span class="proj-view">👁 View</span>
           `;
           card.addEventListener('click', () => {
             if (i !== current){
               current = i;
               updatePositions();
+            } else if (p.url){
+              window.open(p.url, '_blank', 'noopener');
             }
           });
           track.appendChild(card);
@@ -239,6 +241,16 @@ document.querySelectorAll('.skill-card').forEach(item => {
   item.addEventListener('pointerleave', () => {
     item.style.setProperty('--border-opacity', 0);
     item.style.setProperty('--glow-opacity', 0);
+  });
+});
+
+// Make static project cards open their link when clicked (except when clicking an inner link)
+document.querySelectorAll('.proj-card-static').forEach(el => {
+  const url = el.dataset.projectUrl;
+  if (!url) return;
+  el.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return; // let actual links behave normally
+    window.open(url, '_blank', 'noopener');
   });
 });
 

@@ -16,7 +16,7 @@
     --grad-text-b: #6F38B9;
   }
 
-  /* Light mode overrides — toggled via body.light-mode (see script.js) */
+  /* Light mode*/
   body.light-mode{
     --bg-void: #F7F4FB;
     --bg-void-2: #EFE9F8;
@@ -624,32 +624,20 @@
     margin-bottom: 12px;
     line-height: 1.4;
   }
-  .proj-view{
-    display:inline-flex;
-    align-items:center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-hi);
-    background: var(--bg-panel-2);
-    border: 1px solid var(--line);
-    padding: 5px 12px;
-    border-radius: 999px;
-  }
-
   /* Static single card (no slider/arrows) */
   .single-card-wrap{
     display:flex;
     justify-content:center;
   }
   .proj-card-static{
-    width: 320px;
+    width: clamp(240px, 80%, 420px);
     max-width: 100%;
     background: var(--bg-panel);
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 18px;
     transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    cursor: pointer;
   }
   .proj-card-static:hover{
     transform: translateY(-5px);
@@ -658,12 +646,14 @@
   }
   .proj-thumb-large{
     width: 100%;
-    height: 190px;
+    height: auto;
+    aspect-ratio: 16 / 10;
     border-radius: 10px;
     background: linear-gradient(160deg, #C9A8F5, #7C3AED);
     margin-bottom: 16px;
     object-fit: cover;
     display: block;
+    max-height: 48vh;
   }
   .proj-card-static h4{
     font-size: 14.5px;
