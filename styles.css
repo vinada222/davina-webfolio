@@ -710,10 +710,14 @@
     margin: 34px 0 24px;
   }
   .skill-card{
+    position: relative;
+    isolation: isolate;
     background: var(--bg-panel);
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 20px;
+    transition: transform .25s ease, border-color .25s ease;
+
   }
   .skill-card .num{
     font-size: 13px;
@@ -734,6 +738,55 @@
     line-height: 1.55;
   }
 
+  .skill-card.skill-card:hover{
+    transform: translateY(-3px);
+    border-color: rgba(168,85,247,0.4);
+  }
+
+  .skill-card::before{
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(from var(--angle, 0deg),
+    transparent 0%, #F0DFFF 5%, #ffffff 9%, #C084FC 14%, #A855F7 20%, transparent 30%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--border-opacity, 0);
+  transition: opacity .25s ease-out;
+  pointer-events: none;
+  z-index: 2;
+}
+.skill-card:not(:hover)::before{
+  transition: opacity .75s ease-in-out;
+}
+
+.skill-card::after{
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  mix-blend-mode: plus-lighter;
+  mask-image: conic-gradient(from var(--angle, 0deg) at center,
+    black 2.5%, transparent 10%, transparent 90%, black 97.5%);
+  -webkit-mask-image: conic-gradient(from var(--angle, 0deg) at center,
+    black 2.5%, transparent 10%, transparent 90%, black 97.5%);
+  box-shadow:
+    0 0 8px 0 rgba(233,213,255,1),
+    0 0 16px 2px rgba(192,132,252,0.85),
+    0 0 28px 3px rgba(147,51,234,0.55);
+  opacity: var(--glow-opacity, 0);
+  transition: opacity .25s ease-out;
+}
+.skill-card:not(:hover)::after{
+  transition: opacity .75s ease-in-out;
+}
+
+/* Tools*/
   .tools-row{
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -769,6 +822,11 @@
     border: 1px solid var(--line);
     border-radius: 10px;
     padding: 10px 14px;
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .tool-item.tool-item:hover{
+    transform: translateY(-3px);
+    border-color: rgba (168,85,247,0.4);
   }
   .tool-icon{
     width: 32px; height: 32px;

@@ -192,5 +192,54 @@
       groups.forEach(group => groupObserver.observe(group));
     })();
 
+    const EDGE_SENSITIVITY = 0;
+const COLOR_SENSITIVITY = EDGE_SENSITIVITY + 5;
+const GLOW_INTENSITY = 1.6;
+
+function getEdgeProximity(rect, x, y) {
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const dx = x - cx;
+  const dy = y - cy;
+  let kx = Infinity;
+  let ky = Infinity;
+  if (dx !== 0) kx = cx / Math.abs(dx);
+  if (dy !== 0) ky = cy / Math.abs(dy);
+  return Math.min(Math.max(1 / Math.min(kx, ky), 0), 1);
+}
+
+function getCursorAngle(rect, x, y) {
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const dx = x - cx;
+  const dy = y - cy;
+  if (dx === 0 && dy === 0) return 0;
+  let degrees = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+  if (degrees < 0) degrees += 360;
+  return degrees;
+}
+
+document.querySelectorAll('.skill-card').forEach(item => {
+  item.addEventListener('pointermove', (e) => {
+    const rect = item.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const proximity = getEdgeProximity(rect, x, y) * 100;
+    const angle = getCursorAngle(rect, x, y);
+
+    const borderOpacity = Math.max(0, (proximity - COLOR_SENSITIVITY) / (100 - COLOR_SENSITIVITY));
+    const glowOpacity = Math.min(1, Math.max(0, (proximity - EDGE_SENSITIVITY) / (100 - EDGE_SENSITIVITY)) * GLOW_INTENSITY);
+
+    item.style.setProperty('--angle', `${angle}deg`);
+    item.style.setProperty('--border-opacity', borderOpacity);
+    item.style.setProperty('--glow-opacity', glowOpacity);
+  });
+
+  item.addEventListener('pointerleave', () => {
+    item.style.setProperty('--border-opacity', 0);
+    item.style.setProperty('--glow-opacity', 0);
+  });
+});
 
     
