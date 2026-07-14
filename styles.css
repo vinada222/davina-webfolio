@@ -14,21 +14,23 @@
     --text-accent: #D4B2F2;
     --grad-text-a: #BD8DF0;
     --grad-text-b: #6F38B9;
+    --paragraph-color: #FFFFFF;
   }
 
   /* Light mode*/
   body.light-mode{
-    --bg-void: #F7F4FB;
+    --bg-void: #e6e0f0;
     --bg-void-2: #EFE9F8;
     --bg-panel: #FBF9FD;
     --bg-panel-2: #F1ECFA;
-    --line: #E2D6F5;
+    --line: #b4b4b4;
     --text-hi: #241338;
     --text-mid: #5B4A78;
     --text-low: #8577A0;
     --text-accent: #7C3AED;
     --grad-text-a: #9333EA;
     --grad-text-b: #4C1D95;
+    --paragraph-color: #241338;
   }
   body.light-mode .bio{
     color: var(--text-hi);
@@ -60,8 +62,6 @@
   .site-header .header-row{
     pointer-events: auto;
   }
-
-
 
   #home, #projects, #skills, #contact{
     scroll-margin-top: 90px;
@@ -114,14 +114,14 @@
     position: absolute;
     top: 50%; left: 0;
     width: 100%; height: 1.2px;
-    background: linear-gradient(90deg, transparent, #E9D5FF 45%, #fff 50%, #E9D5FF 55%, transparent);
+    background: linear-gradient(90deg, transparent, #9333EA 45%, #6D28D9 50%, #9333EA 55%, transparent);
     transform: translateY(-50%);
   }
   .sparkle .bar-v{
     position: absolute;
     left: 50%; top: 0;
     width: 1.2px; height: 100%;
-    background: linear-gradient(180deg, transparent, #E9D5FF 45%, #fff 50%, #E9D5FF 55%, transparent);
+    background: linear-gradient(180deg, transparent, #9333EA 45%, #6D28D9 50%, #9333EA 55%, transparent);
     transform: translateX(-50%);
   }
   .sparkle .core{
@@ -301,6 +301,8 @@
     background: var(--bg-panel-2);
     border-color: rgba(111,56,185,0.25);
   }
+
+  
 
   /* Hero content */
   .hero-grid{
@@ -620,7 +622,7 @@
   }
   .proj-card p{
     font-size: 11.5px;
-    color: var(--text-low);
+    color: var(--paragraph-color);
     margin-bottom: 12px;
     line-height: 1.4;
   }
@@ -662,7 +664,7 @@
   }
   .proj-card-static p{
     font-size: 12px;
-    color: var(--text-low);
+    color: var(--paragraph-color);
     margin-bottom: 14px;
     line-height: 1.4;
   }
@@ -672,7 +674,7 @@
     position: relative;
     padding: 70px 48px 100px;
     background:
-      radial-gradient(ellipse 600px 400px at 85% 15%, rgba(147,51,234,0.26), transparent 65%),
+      radial-gradient(ellipse 600px 400px at 85% 15%, rgba(147,51,234,0.14), transparent 65%),
       radial-gradient(ellipse 500px 350px at 10% 85%, rgba(168,85,247,0.16), transparent 60%),
       linear-gradient(180deg, var(--bg-void), var(--bg-void-2));
     overflow: hidden;
@@ -724,7 +726,7 @@
   }
   .skill-card p{
     font-size: 11.5px;
-    color: var(--text-accent);
+    color: var(--paragraph-color);
     line-height: 1.55;
   }
 
@@ -819,7 +821,7 @@
     border-color: rgba (168,85,247,0.4);
   }
   .tool-icon{
-    width: 32px; height: 32px;
+    width: 36px; height: 36px;
     border-radius: 8px;
     flex-shrink: 0;
     display: flex;
@@ -831,13 +833,16 @@
     background: var(--bg-panel-2);
     border: 1px solid var(--line);
     overflow: hidden;
+    padding: 4px;
   }
   .tool-icon svg{
-    width: 18px; height: 18px;
+    width: 20px; height: 20px;
   }
   .tool-icon img{
-    width: 20px; height: 20px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    display: block;
   }
   .tool-name{
     font-size: 13px;
