@@ -85,22 +85,22 @@
 
     // IMAGE SLOTS: School Organization Works
     initProjectSlider('projectTrack', 'prevArrow', 'nextArrow', [
-      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "/photos/CSS%20ORG.png" },
-      { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display.", img: "/photos/PlacidoPenitente.jpg" },
+      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/CSS%20ORG.png" },
+      { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display.", img: "./photos/PlacidoPenitente.jpg" },
     ]);
 
     // IMAGE SLOTS: GD Internship Works
     initProjectSlider('projectTrack2', 'prevArrow2', 'nextArrow2', [
-      { title: "Neosense Integrated Solutions", desc: "Design graphics focusing on advertisements for social media that the company specializes in cutting-edge security systems and advanced timekeeping solutions.", img: "/photos/Scene%201.png" },
-      { title: "J.KOpi", desc: "Design for social media posts, carousels, and stories for a social media marketing agency, creating strong brand identity and advertising.", img: "/photos/JKopi%20Thumbnail.png" },
-      { title: "Beauty Pout", desc: "Advertising graphics on launching their lip cosmetic products and creating special promos, tutorials, and photoshoots.", img: "/photos/BeautyPout.png" }
+      { title: "Neosense Integrated Solutions", desc: "Design graphics focusing on advertisements for social media that the company specializes in cutting-edge security systems and advanced timekeeping solutions.", img: "./photos/Scene%201.png" },
+      { title: "J.KOpi", desc: "Design for social media posts, carousels, and stories for a social media marketing agency, creating strong brand identity and advertising.", img: "./photos/JKopi%20Thumbnail.png" },
+      { title: "Beauty Pout", desc: "Advertising graphics on launching their lip cosmetic products and creating special promos, tutorials, and photoshoots.", img: "./photos/BeautyPout.png" }
     ]);
 
     // IMAGE SLOTS: 3 best logos
     initProjectSlider('projectTrack3', 'prevArrow3', 'nextArrow3', [
-      { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "/photos/Gailcast.png" },
-      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "/photos/CSSLOGOORG.jpg" },
-      { title: "Good Buoy", desc: "Pinnacle Pioneer's Logo for their Proposed Research Project", img: "/photos/GoodB.png" }
+      { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "./photos/Gailcast.png" },
+      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "./photos/CSSLOGOORG.jpg" },
+      { title: "Good Buoy", desc: "Pinnacle Pioneer's Logo for their Proposed Research Project", img: "./photos/GoodB.png" }
     ]);
 
    
