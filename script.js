@@ -105,7 +105,7 @@
 
    
     const navLinks = document.querySelectorAll('nav a[data-target]');
-    const navSections = ['home', 'projects', 'skills', 'contact']
+    const navSections = ['home', 'projects', 'certifications', 'skills', 'contact']
       .map(id => document.getElementById(id))
       .filter(Boolean);
 
@@ -253,5 +253,8 @@ document.querySelectorAll('.proj-card-static').forEach(el => {
     window.open(url, '_blank', 'noopener');
   });
 });
+
+
+//certifications
 
     
