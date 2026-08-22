@@ -1,103 +1,43 @@
-    function initProjectSlider(trackId, prevId, nextId, projects){
-      const track = document.getElementById(trackId);
-      const prevBtn = document.getElementById(prevId);
-      const nextBtn = document.getElementById(nextId);
-      let current = 0;
-      let cardEls = [];
+function renderProjectGrid(containerId, projects){
+      const grid = document.getElementById(containerId);
+      if (!grid) return;
 
-      function buildCards(){
-        projects.forEach((p, i) => {
-          const card = document.createElement('div');
-          card.className = 'proj-card';
-          card.dataset.url = p.url || '';
-          card.innerHTML = `
+      projects.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'proj-card';
+        card.innerHTML = `
+          <div class="proj-thumb-frame">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
             <img class="proj-thumb" src="${p.img}" alt="${p.title}">
-            <h4>${p.title.toUpperCase()}</h4>
-            <p>${p.desc}</p>
-          `;
-          card.addEventListener('click', () => {
-            if (i !== current){
-              current = i;
-              updatePositions();
-            } else if (p.url){
-              window.open(p.url, '_blank', 'noopener');
-            }
-          });
-          track.appendChild(card);
-          cardEls.push(card);
-        });
-      }
-
-      function updatePositions(){
-        const step = Math.max(90, Math.min(150, track.clientWidth * 0.28));
-        const half = projects.length / 2;
-
-        cardEls.forEach((card, i) => {
-          let offset = i - current;
-          if (offset > half) offset -= projects.length;
-          if (offset < -half) offset += projects.length;
-
-          const abs = Math.abs(offset);
-          const scale = 1 - Math.min(abs, 3) * 0.14;
-          const translateX = offset * step;
-          const rotateY = offset * -18;
-          const opacity = abs > 2 ? 0 : (abs === 0 ? 1 : abs === 1 ? 0.6 : 0.28);
-          const blur = abs === 0 ? 0 : abs === 1 ? 1.5 : 3;
-
-          card.classList.toggle('is-center', offset === 0);
-          card.style.transform = `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
-          card.style.opacity = opacity;
-          card.style.filter = `blur(${blur}px)`;
-          card.style.zIndex = 10 - abs;
-          card.style.pointerEvents = abs > 2 ? 'none' : 'auto';
-        });
-      }
-
-      function move(dir){
-        current = (current + dir + projects.length) % projects.length;
-        updatePositions();
-      }
-
-      prevBtn.addEventListener('click', () => move(-1));
-      nextBtn.addEventListener('click', () => move(1));
-
-      track.setAttribute('tabindex', '0');
-      track.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') move(1);
-        if (e.key === 'ArrowLeft') move(-1);
+          </div>
+          <h4>${p.title.toUpperCase()}</h4>
+          <p>${p.desc}</p>
+        `;
+        if (p.url){
+          card.addEventListener('click', () => window.open(p.url, '_blank', 'noopener'));
+        }
+        grid.appendChild(card);
       });
-
-      let dragStartX = null;
-      track.addEventListener('pointerdown', (e) => { dragStartX = e.clientX; });
-      track.addEventListener('pointerup', (e) => {
-        if (dragStartX === null) return;
-        const delta = e.clientX - dragStartX;
-        if (Math.abs(delta) > 40) move(delta < 0 ? 1 : -1);
-        dragStartX = null;
-      });
-      track.addEventListener('pointercancel', () => { dragStartX = null; });
-
-      window.addEventListener('resize', updatePositions);
-
-      buildCards();
-      updatePositions();
     }
 
     // IMAGE SLOTS: School Organization Works
-    initProjectSlider('projectTrack', 'prevArrow', 'nextArrow', [
+    renderProjectGrid('projectGrid', [
       { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/CSS%20ORG.png" },
       { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display.", img: "./photos/PlacidoPenitente.jpg" },
     ]);
 
     // IMAGE SLOTS: GD Internship Works
-    initProjectSlider('projectTrack2', 'prevArrow2', 'nextArrow2', [
+    renderProjectGrid('projectGrid2', [
       { title: "Neosense Integrated Solutions", desc: "Design graphics focusing on advertisements for social media that the company specializes in cutting-edge security systems and advanced timekeeping solutions.", img: "./photos/Scene%201.png" },
       { title: "J.KOpi", desc: "Design for social media posts, carousels, and stories for a social media marketing agency, creating strong brand identity and advertising.", img: "./photos/JKopi%20Thumbnail.png" },
       { title: "Beauty Pout", desc: "Advertising graphics on launching their lip cosmetic products and creating special promos, tutorials, and photoshoots.", img: "./photos/BeautyPout.png" }
     ]);
 
     // IMAGE SLOTS: 3 best logos
-    initProjectSlider('projectTrack3', 'prevArrow3', 'nextArrow3', [
+    renderProjectGrid('projectGrid3', [
       { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "./photos/Gailcast.png" },
       { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "./photos/CSSLOGOORG.jpg" },
       { title: "Good Buoy", desc: "Pinnacle Pioneer's Logo for their Proposed Research Project", img: "./photos/GoodB.png" }
@@ -105,7 +45,7 @@
 
    
     const navLinks = document.querySelectorAll('nav a[data-target]');
-    const navSections = ['home', 'projects', 'certifications', 'skills']
+    const navSections = ['home', 'projects', 'certifications', 'skills', 'contact']
       .map(id => document.getElementById(id))
       .filter(Boolean);
 
@@ -254,11 +194,10 @@ document.querySelectorAll('.proj-card-static').forEach(el => {
   });
 });
 
-//footer
+// Back to top button (in the footer)
 const backToTopBtn = document.getElementById('backToTop');
 if (backToTopBtn){
   backToTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
-    
