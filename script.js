@@ -25,8 +25,8 @@ function renderProjectGrid(containerId, projects){
 
     // IMAGE SLOTS: School Organization Works
     renderProjectGrid('projectGrid', [
-      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/CSS%20ORG.png" },
-      { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display.", img: "./photos/PlacidoPenitente.jpg" },
+      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/MCC COLLAGE.png" },
+      { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display along with apparel designs and photoshop artworks.", img: "./photos/PlacidoPenitente.jpg" },
     ]);
 
     // IMAGE SLOTS: GD Internship Works
@@ -39,8 +39,7 @@ function renderProjectGrid(containerId, projects){
     // IMAGE SLOTS: 3 best logos
     renderProjectGrid('projectGrid3', [
       { title: "Gailcast", desc: "Beauty & Wellness E-Commerce Website", img: "./photos/Gailcast.png" },
-      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "./photos/CSSLOGOORG.jpg" },
-      { title: "Good Buoy", desc: "Pinnacle Pioneer's Logo for their Proposed Research Project", img: "./photos/GoodB.png" }
+      { title: "Computer Students' Society", desc: "Redesigned logo and brand identity (2025).", img: "./photos/CSSLOGOORG.jpg" }
     ]);
 
    
