@@ -25,8 +25,8 @@ function renderProjectGrid(containerId, projects){
 
     // IMAGE SLOTS: School Organization Works
     renderProjectGrid('projectGrid', [
-      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/MCC COLLAGE.png" },
-      { title: "Presentation Mockup", desc: "Elevating visual concepts into a cohesive, polished display along with apparel designs and photoshop artworks.", img: "./photos/PlacidoPenitente.jpg" },
+      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/CSSBooth25.png" },
+      { title: "Creative Compositing & Manipulation", desc: "Specializing in creative digital compositing, blending advanced photo manipulation techniques with stylized user-interface overlays to create high-impact, narrative-driven visual assets.", img: "./photos/MCC COLLAGE.png" },
     ]);
 
     // IMAGE SLOTS: GD Internship Works
