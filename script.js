@@ -16,16 +16,89 @@ function renderProjectGrid(containerId, projects){
           <h4>${p.title.toUpperCase()}</h4>
           <p>${p.desc}</p>
         `;
-        if (p.url){
+        if (p.detail){
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          card.addEventListener('click', () => openProjectDetail(p));
+          card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' '){
+              event.preventDefault();
+              openProjectDetail(p);
+            }
+          });
+        } else if (p.url){
           card.addEventListener('click', () => window.open(p.url, '_blank', 'noopener'));
         }
         grid.appendChild(card);
       });
     }
 
-    // IMAGE SLOTS: School Organization Works
+    function openProjectDetail(project){
+      const existingDetail = document.getElementById('projectDetail');
+      if (existingDetail) existingDetail.remove();
+
+      const detail = document.createElement('div');
+      detail.className = 'project-detail';
+      detail.id = 'projectDetail';
+      detail.setAttribute('role', 'dialog');
+      detail.setAttribute('aria-modal', 'true');
+      detail.setAttribute('aria-labelledby', 'projectDetailTitle');
+      detail.innerHTML = `
+        <div class="project-detail-backdrop" data-detail-close></div>
+        <article class="project-detail-panel">
+          <button class="project-detail-close" type="button" aria-label="Close project details" data-detail-close>&times;</button>
+          <div class="project-detail-copy">
+            <span class="panel-eyebrow">${project.detail.eyebrow}</span>
+            <h2 id="projectDetailTitle">${project.title}</h2>
+            <p>${project.detail.description}</p>
+            <div class="project-detail-tags">
+              ${project.detail.tags.map(tag => `<span>${tag}</span>`).join('')}
+            </div>
+          </div>
+          <div class="project-detail-gallery">
+            ${project.detail.gallery.map(image => `
+              <figure>
+                <img src="${image.src}" alt="${image.alt}">
+                <figcaption>${image.caption}</figcaption>
+              </figure>
+            `).join('')}
+          </div>
+        </article>
+      `;
+
+      document.body.appendChild(detail);
+      document.body.classList.add('project-detail-open');
+      detail.querySelector('[data-detail-close]').focus();
+
+      const closeDetail = () => {
+        detail.remove();
+        document.body.classList.remove('project-detail-open');
+      };
+      detail.querySelectorAll('[data-detail-close]').forEach(button => {
+        button.addEventListener('click', closeDetail);
+      });
+      detail.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeDetail();
+      });
+    }
+
+    //School Organization Works
     renderProjectGrid('projectGrid', [
-      { title: "Computer Students' Society (CSS)", desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ", img: "./photos/CSSBooth25.png" },
+      {
+        title: "Computer Students' Society (CSS)",
+        desc: "School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets. ",
+        img: "./photos/CSSBooth25.png",
+        detail: {
+          eyebrow: "SCHOOL ORGANIZATION WORKS",
+          description: "A collection of publication materials, promotional graphics, merchandise mockups, and visual assets created for the Computer Students' Society.",
+          tags: ["Publication Design", "Merchandise", "Brand Assets"],
+          gallery: [
+            { src: "./photos/CSSBooth25.png", alt: "Computer Students' Society publication materials", caption: "Publication materials and promotional graphics" },
+            { src: "./photos/CSSLOGOORG.jpg", alt: "Computer Students' Society logo", caption: "Organization logo and brand identity" },
+            { src: "./photos/CSS.png", alt: "Computer Students' Society visual asset", caption: "Supporting visual asset" }
+          ]
+        }
+      },
       { title: "Creative Compositing & Manipulation", desc: "Specializing in creative digital compositing, blending advanced photo manipulation techniques with stylized user-interface overlays to create high-impact, narrative-driven visual assets.", img: "./photos/MCC COLLAGE.png" },
     ]);
 
@@ -44,9 +117,13 @@ function renderProjectGrid(containerId, projects){
 
    
     const navLinks = document.querySelectorAll('nav a[data-target]');
+    const sectionLinks = document.querySelectorAll('a[data-target]');
     const navSections = ['home', 'projects', 'certifications', 'skills', 'contact']
       .map(id => document.getElementById(id))
       .filter(Boolean);
+    const root = document.documentElement;
+    const originalScrollBehavior = root.style.scrollBehavior;
+    let scrollAnimationFrame = null;
 
     function setActiveNav(id){
       navLinks.forEach(link => {
@@ -54,8 +131,78 @@ function renderProjectGrid(containerId, projects){
       });
     }
 
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => setActiveNav(link.dataset.target));
+    function focusSection(target){
+      if (!target.hasAttribute('tabindex')){
+        target.setAttribute('tabindex', '-1');
+      }
+      target.focus({ preventScroll: true });
+    }
+
+    function scrollToSection(target, onComplete){
+      if (scrollAnimationFrame !== null){
+        cancelAnimationFrame(scrollAnimationFrame);
+        scrollAnimationFrame = null;
+      }
+
+      const destination = destinationFor(target);
+      root.style.scrollBehavior = 'auto';
+      const start = window.scrollY;
+      const distance = destination - start;
+
+      if (Math.abs(distance) < 1){
+        root.style.scrollBehavior = originalScrollBehavior;
+        onComplete();
+        return;
+      }
+
+      const duration = Math.min(1100, Math.max(500, Math.abs(distance) * 0.35));
+      const startedAt = performance.now();
+
+      function animateScroll(now){
+        const progress = Math.min((now - startedAt) / duration, 1);
+        const easedProgress = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        window.scrollTo(0, start + distance * easedProgress);
+
+        if (progress < 1){
+          scrollAnimationFrame = requestAnimationFrame(animateScroll);
+        } else {
+          scrollAnimationFrame = null;
+          root.style.scrollBehavior = originalScrollBehavior;
+          onComplete();
+        }
+      }
+
+      scrollAnimationFrame = requestAnimationFrame(animateScroll);
+    }
+
+    function destinationFor(target){
+      const marginTop = parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
+      const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight);
+      return Math.max(0, Math.min(
+        maxScroll,
+        target.getBoundingClientRect().top + window.scrollY - marginTop
+      ));
+    }
+
+    sectionLinks.forEach(link => {
+      link.addEventListener('click', event => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        const target = document.getElementById(link.dataset.target);
+        if (!target) return;
+
+        event.preventDefault();
+        setActiveNav(link.dataset.target);
+        scrollToSection(target, () => {
+          focusSection(target);
+          if (window.location.hash !== link.hash){
+            window.history.pushState(null, '', link.hash);
+          }
+        });
+      });
     });
 
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -113,24 +260,23 @@ function renderProjectGrid(containerId, projects){
     try { savedTheme = localStorage.getItem('portfolio-theme') || 'dark'; } catch (e) {}
     applyTheme(savedTheme);
 
-    // On-scroll reveal animation: fade + slide up, staggered per group, plays once
+    // Reveal each item as it enters the viewport so long sections animate while scrolling.
     (function initScrollReveal(){
-      const groups = document.querySelectorAll('[data-reveal-group]');
-      const staggerStep = 180; // ms between each element in the same group
+      const items = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)){
+        items.forEach(item => item.classList.add('in-view'));
+        return;
+      }
 
-      const groupObserver = new IntersectionObserver((entries, obs) => {
+      const revealObserver = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
-          const group = entry.target;
-          const items = group.querySelectorAll('.reveal');
-          items.forEach((el, i) => {
-            setTimeout(() => el.classList.add('in-view'), i * staggerStep);
-          });
-          obs.unobserve(group); // only once — never re-trigger on re-scroll
+          entry.target.classList.add('in-view');
+          obs.unobserve(entry.target);
         });
-      }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-      groups.forEach(group => groupObserver.observe(group));
+      items.forEach(item => revealObserver.observe(item));
     })();
 
     const EDGE_SENSITIVITY = 0;
