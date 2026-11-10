@@ -3,7 +3,7 @@ function renderProjectGrid(containerId, projects){
       if (!grid) return;
 
       projects.forEach(p => {
-        const card = document.createElement('div');
+        const card = p.detail ? document.createElement('a') : document.createElement('div');
         card.className = 'proj-card';
         card.innerHTML = `
           <div class="proj-thumb-frame">
@@ -17,68 +17,21 @@ function renderProjectGrid(containerId, projects){
           <p>${p.desc}</p>
         `;
         if (p.detail){
-          card.setAttribute('role', 'button');
-          card.setAttribute('tabindex', '0');
-          card.addEventListener('click', () => openProjectDetail(p));
-          card.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' '){
-              event.preventDefault();
-              openProjectDetail(p);
-            }
-          });
-        } else if (p.url){
-          card.addEventListener('click', () => window.open(p.url, '_blank', 'noopener'));
+            card.href = './gallery.html';
+            card.setAttribute('aria-label', `View ${p.title} project gallery`);
+            card.addEventListener('click', () => {
+              sessionStorage.setItem('galleryProject', JSON.stringify({
+                title: p.title,
+                desc: p.desc,
+                category: p.detail.category,
+                panelEyebrow: p.detail.eyebrow,
+                panelHeading: p.detail.heading
+              }));
+            });
+          } else if (p.url){
+            card.addEventListener('click', () => window.open(p.url, '_blank', 'noopener'));
         }
         grid.appendChild(card);
-      });
-    }
-
-    function openProjectDetail(project){
-      const existingDetail = document.getElementById('projectDetail');
-      if (existingDetail) existingDetail.remove();
-
-      const detail = document.createElement('div');
-      detail.className = 'project-detail';
-      detail.id = 'projectDetail';
-      detail.setAttribute('role', 'dialog');
-      detail.setAttribute('aria-modal', 'true');
-      detail.setAttribute('aria-labelledby', 'projectDetailTitle');
-      detail.innerHTML = `
-        <div class="project-detail-backdrop" data-detail-close></div>
-        <article class="project-detail-panel">
-          <button class="project-detail-close" type="button" aria-label="Close project details" data-detail-close>&times;</button>
-          <div class="project-detail-copy">
-            <span class="panel-eyebrow">${project.detail.eyebrow}</span>
-            <h2 id="projectDetailTitle">${project.title}</h2>
-            <p>${project.detail.description}</p>
-            <div class="project-detail-tags">
-              ${project.detail.tags.map(tag => `<span>${tag}</span>`).join('')}
-            </div>
-          </div>
-          <div class="project-detail-gallery">
-            ${project.detail.gallery.map(image => `
-              <figure>
-                <img src="${image.src}" alt="${image.alt}">
-                <figcaption>${image.caption}</figcaption>
-              </figure>
-            `).join('')}
-          </div>
-        </article>
-      `;
-
-      document.body.appendChild(detail);
-      document.body.classList.add('project-detail-open');
-      detail.querySelector('[data-detail-close]').focus();
-
-      const closeDetail = () => {
-        detail.remove();
-        document.body.classList.remove('project-detail-open');
-      };
-      detail.querySelectorAll('[data-detail-close]').forEach(button => {
-        button.addEventListener('click', closeDetail);
-      });
-      detail.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') closeDetail();
       });
     }
 
@@ -90,13 +43,8 @@ function renderProjectGrid(containerId, projects){
         img: "./photos/CSSBooth25.png",
         detail: {
           eyebrow: "SCHOOL ORGANIZATION WORKS",
-          description: "A collection of publication materials, promotional graphics, merchandise mockups, and visual assets created for the Computer Students' Society.",
-          tags: ["Publication Design", "Merchandise", "Brand Assets"],
-          gallery: [
-            { src: "./photos/CSSBooth25.png", alt: "Computer Students' Society publication materials", caption: "Publication materials and promotional graphics" },
-            { src: "./photos/CSSLOGOORG.jpg", alt: "Computer Students' Society logo", caption: "Organization logo and brand identity" },
-            { src: "./photos/CSS.png", alt: "Computer Students' Society visual asset", caption: "Supporting visual asset" }
-          ]
+          heading: "School Publication Materials, Mockups, & Posters",
+          category: "Multimedia & Graphic Works"
         }
       },
       { title: "Creative Compositing & Manipulation", desc: "Specializing in creative digital compositing, blending advanced photo manipulation techniques with stylized user-interface overlays to create high-impact, narrative-driven visual assets.", img: "./photos/MCC COLLAGE.png" },
@@ -220,6 +168,14 @@ function renderProjectGrid(containerId, projects){
     (function initPageLoader(){
       const loaderEl = document.getElementById('pageLoader');
       if (!loaderEl) return;
+
+      const navigation = performance.getEntriesByType('navigation')[0];
+      const isHomeRefresh = navigation?.type === 'reload'
+        && (window.location.hash === '' || window.location.hash === '#home');
+      if (!isHomeRefresh){
+        loaderEl.remove();
+        return;
+      }
 
       const minDisplayTime = 3000; // ms — always shown at least this long
       const shownAt = Date.now();

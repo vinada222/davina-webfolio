@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0510">
+  <title>CSS Project Gallery | Davina's Art</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="./photos/palette.png">
+  <link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav aria-label="Main navigation">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#projects" class="active" aria-current="page">Projects</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="index.html#certifications">Certifications</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="gallery-wrap">
+    <div class="sparkle-layer" aria-hidden="true">
+      <span class="sparkle" style="top:8%;left:5%;animation-delay:.3s"></span>
+      <span class="sparkle" style="top:22%;left:92%;animation-delay:1.2s"></span>
+      <span class="sparkle" style="top:58%;left:4%;animation-delay:1.8s"></span>
+      <span class="sparkle" style="top:82%;left:95%;animation-delay:.7s"></span>
+      <span class="spark-h" style="top:34%;animation-delay:1.2s"></span>
+      <span class="spark-v" style="left:90%;animation-delay:2.4s"></span>
+    </div>
+
+    <div class="gallery-inner">
+      <a href="index.html#projects" class="back-btn">&larr; Back to Projects</a>
+
+      <span class="eyebrow" id="galleryEyebrow">SCHOOL ORGANIZATION WORKS</span>
+      <h1 class="gallery-title" id="galleryHeading">School Publication Materials, Mockups, &amp; Posters</h1>
+      <p class="gallery-desc" id="galleryDesc">School Organization multimedia works, creating publication materials, promotional content, merchandise, and visual assets.</p>
+
+      <div class="gallery-meta">
+        <span class="gallery-category" id="galleryCategory">Multimedia &amp; Graphic Works</span>
+        <span class="gallery-project" id="galleryProjectTitle">COMPUTER STUDENTS' SOCIETY (CSS)</span>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid" aria-label="Project gallery"></div>
+    </div>
+  </main>
+
+  <script src="gallery.js"></script>
+</body>
+</html>

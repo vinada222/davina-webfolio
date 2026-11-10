@@ -614,11 +614,14 @@ body.light-mode .certifications-placeholder{
     gap: 20px;
   }
   .proj-card{
+    display: block;
     background: var(--bg-panel);
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 14px;
+    color: inherit;
     cursor: pointer;
+    text-decoration: none;
     transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
   }
   .proj-card:hover{
