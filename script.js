@@ -11,7 +11,7 @@ function renderProjectGrid(containerId, projects){
             <span class="corner corner-tr"></span>
             <span class="corner corner-bl"></span>
             <span class="corner corner-br"></span>
-            <img class="proj-thumb" src="${p.img}" alt="${p.title}">
+            <img class="proj-thumb reveal" src="${p.img}" alt="${p.title}">
           </div>
           <h4>${p.title.toUpperCase()}</h4>
           <p>${p.desc}</p>
