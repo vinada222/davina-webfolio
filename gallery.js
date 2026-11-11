@@ -21,6 +21,34 @@ function getGalleryProject(){
 }
 
 const project = getGalleryProject();
+const darkThemeToggle = document.getElementById('darkThemeToggle');
+const lightThemeToggle = document.getElementById('lightThemeToggle');
+
+function applyTheme(mode){
+  const isLight = mode === 'light';
+  document.body.classList.toggle('light-mode', isLight);
+  darkThemeToggle.classList.toggle('active', !isLight);
+  lightThemeToggle.classList.toggle('active', isLight);
+  darkThemeToggle.setAttribute('aria-pressed', String(!isLight));
+  lightThemeToggle.setAttribute('aria-pressed', String(isLight));
+  try {
+    localStorage.setItem('portfolio-theme', isLight ? 'light' : 'dark');
+  } catch (error) {
+    console.error('Could not save the selected color theme.', error);
+  }
+}
+
+darkThemeToggle.addEventListener('click', () => applyTheme('dark'));
+lightThemeToggle.addEventListener('click', () => applyTheme('light'));
+
+let savedTheme = 'dark';
+try {
+  savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+} catch (error) {
+  console.error('Could not read the saved color theme.', error);
+}
+applyTheme(savedTheme);
+
 document.title = `${project.title} | Davina's Art`;
 document.getElementById('galleryEyebrow').textContent = project.panelEyebrow;
 document.getElementById('galleryHeading').textContent = project.panelHeading || project.title;
@@ -43,6 +71,9 @@ const artworkPhotoSets = [
   [
     { src: './photos/AKWE1.png', alt: 'Acquaintance Party dress code poster' },
     { src: './photos/AKWE2.png', alt: 'Acquaintance Party dress code guidelines poster' }
+  ],
+  [
+    { src: './photos/AKWE3.png', alt: 'Acquaintance Party poster' }
   ]
 ];
 
@@ -60,26 +91,42 @@ for (let index = 1; index <= 4; index += 1){
   card.className = 'gallery-item';
 
   if (index <= artworkPhotoSets.length){
-    card.classList.add('gallery-folder');
-    const stage = document.createElement('div');
-    stage.className = 'folder-stage';
     const photos = artworkPhotoSets[index - 1];
-    photos.forEach((photo, photoIndex) => {
+    if (photos.length === 1){
+      card.classList.add('gallery-single');
       const button = document.createElement('button');
-      button.className = `folder-photo folder-photo-${photoIndex + 1}`;
+      button.className = 'gallery-single-photo';
       button.type = 'button';
-      button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}, photo ${photoIndex + 1}: ${photo.alt}`);
+      button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}: ${photos[0].alt}`);
 
       const image = document.createElement('img');
-      image.src = photo.src;
+      image.src = photos[0].src;
       image.alt = '';
       image.loading = 'lazy';
       button.appendChild(image);
-      button.addEventListener('click', () => openPhotoViewer(photoIndex, button, photos));
-      stage.appendChild(button);
-    });
+      button.addEventListener('click', () => openPhotoViewer(0, button, photos));
+      card.appendChild(button);
+    } else {
+      card.classList.add('gallery-folder');
+      const stage = document.createElement('div');
+      stage.className = 'folder-stage';
+      photos.forEach((photo, photoIndex) => {
+        const button = document.createElement('button');
+        button.className = `folder-photo folder-photo-${photoIndex + 1}`;
+        button.type = 'button';
+        button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}, photo ${photoIndex + 1}: ${photo.alt}`);
 
-    card.appendChild(stage);
+        const image = document.createElement('img');
+        image.src = photo.src;
+        image.alt = '';
+        image.loading = 'lazy';
+        button.appendChild(image);
+        button.addEventListener('click', () => openPhotoViewer(photoIndex, button, photos));
+        stage.appendChild(button);
+      });
+
+      card.appendChild(stage);
+    }
   } else {
     const placeholder = document.createElement('span');
     const title = document.createElement('strong');
