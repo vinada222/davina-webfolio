@@ -21,12 +21,20 @@
 
   <main class="gallery-wrap">
     <div class="sparkle-layer" aria-hidden="true">
-      <span class="sparkle" style="top:8%;left:5%;animation-delay:.3s"></span>
-      <span class="sparkle" style="top:22%;left:92%;animation-delay:1.2s"></span>
-      <span class="sparkle" style="top:58%;left:4%;animation-delay:1.8s"></span>
-      <span class="sparkle" style="top:82%;left:95%;animation-delay:.7s"></span>
-      <span class="spark-h" style="top:34%;animation-delay:1.2s"></span>
-      <span class="spark-v" style="left:90%;animation-delay:2.4s"></span>
+      <span class="sparkle" style="top:6%;left:3%;animation-delay:.3s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:9%;left:94%;animation-delay:1.7s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:92%;left:5%;animation-delay:2.6s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:90%;left:93%;animation-delay:1s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:25%;left:2%;animation-delay:2.1s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:25%;left:96%;animation-delay:.7s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:48%;left:3%;animation-delay:3.2s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:48%;left:95%;animation-delay:1.4s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:70%;left:2%;animation-delay:2.8s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="sparkle" style="top:70%;left:94%;animation-delay:.5s"><span class="bar-h"></span><span class="bar-v"></span><span class="core"></span></span>
+      <span class="spark-h" style="top:4%;animation-delay:1.2s"></span>
+      <span class="spark-h" style="top:97%;animation-delay:4s"></span>
+      <span class="spark-v" style="left:2%;animation-delay:2.4s"></span>
+      <span class="spark-v" style="left:97%;animation-delay:5s"></span>
     </div>
 
     <div class="gallery-inner">
@@ -44,6 +52,27 @@
       <div class="gallery-grid" id="galleryGrid" aria-label="Project gallery"></div>
     </div>
   </main>
+
+  <dialog class="photo-lightbox" id="photoLightbox" aria-label="Artwork photo viewer">
+    <div class="lightbox-panel">
+      <div class="lightbox-toolbar">
+        <p class="lightbox-counter" id="lightboxCounter" aria-live="polite"></p>
+        <div class="lightbox-controls">
+          <button type="button" id="closeLightbox" aria-label="Close photo viewer">×</button>
+        </div>
+      </div>
+      <div class="lightbox-viewer" id="lightboxViewer">
+        <button type="button" class="lightbox-arrow" id="previousPhoto" aria-label="Previous photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 4-8 8 8 8"/></svg>
+        </button>
+        <img class="lightbox-image" id="lightboxImage" alt="">
+        <button type="button" class="lightbox-arrow" id="nextPhoto" aria-label="Next photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 4 8 8-8 8"/></svg>
+        </button>
+      </div>
+      <p class="lightbox-hint">Click the photo to zoom in or out · Scroll to adjust zoom · Drag to pan · Use arrows or swipe to browse</p>
+    </div>
+  </dialog>
 
   <script src="gallery.js"></script>
 </body>

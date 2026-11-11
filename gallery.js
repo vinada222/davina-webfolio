@@ -35,9 +35,159 @@ if (project.category){
 }
 
 const galleryGrid = document.getElementById('galleryGrid');
+const artworkPhotos = [
+  { src: './photos/VisitBooth1.png', alt: 'Visit Our Booth poster for the Computer Students’ Society' },
+  { src: './photos/VisitBooth2.png', alt: 'Activities poster for the Computer Students’ Society booth' }
+];
+
+function openPhotoViewer(index, trigger){
+  showPhoto(index);
+  if (!photoLightbox.open) photoLightbox.showModal();
+  lastPhotoTrigger = trigger;
+}
+
 for (let index = 1; index <= 4; index += 1){
   const card = document.createElement('article');
   card.className = 'gallery-item';
-  card.innerHTML = `<span><strong>Artwork ${String(index).padStart(2, '0')}</strong>Image coming soon</span>`;
+
+  if (index === 1){
+    card.classList.add('gallery-folder');
+    const stage = document.createElement('div');
+    stage.className = 'folder-stage';
+    artworkPhotos.forEach((photo, photoIndex) => {
+      const button = document.createElement('button');
+      button.className = `folder-photo folder-photo-${photoIndex + 1}`;
+      button.type = 'button';
+      button.setAttribute('aria-label', `Open folder with photo ${photoIndex + 1}: ${photo.alt}`);
+
+      const image = document.createElement('img');
+      image.src = photo.src;
+      image.alt = '';
+      image.loading = 'lazy';
+      button.appendChild(image);
+      button.setAttribute('aria-label', `View photo ${photoIndex + 1}: ${photo.alt}`);
+      button.addEventListener('click', () => openPhotoViewer(photoIndex, button));
+      stage.appendChild(button);
+    });
+
+    card.appendChild(stage);
+  } else {
+    const placeholder = document.createElement('span');
+    const title = document.createElement('strong');
+    title.textContent = `Artwork ${String(index).padStart(2, '0')}`;
+    placeholder.append(title, document.createTextNode('Image coming soon'));
+    card.appendChild(placeholder);
+  }
+
   galleryGrid.appendChild(card);
 }
+
+const photoLightbox = document.getElementById('photoLightbox');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxCounter = document.getElementById('lightboxCounter');
+const lightboxViewer = document.getElementById('lightboxViewer');
+let currentPhoto = 0;
+let zoomLevel = 1;
+let panX = 0;
+let panY = 0;
+let pointerStart = null;
+let draggedImage = false;
+let lastPhotoTrigger = null;
+
+function updateZoom(){
+  lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+  lightboxImage.style.cursor = zoomLevel > 1 ? 'zoom-out' : 'zoom-in';
+}
+
+function showPhoto(index){
+  currentPhoto = (index + artworkPhotos.length) % artworkPhotos.length;
+  const photo = artworkPhotos[currentPhoto];
+  lightboxImage.src = photo.src;
+  lightboxImage.alt = photo.alt;
+  lightboxCounter.textContent = `Photo ${currentPhoto + 1} of ${artworkPhotos.length}`;
+  zoomLevel = 1;
+  panX = 0;
+  panY = 0;
+  updateZoom();
+}
+
+function changeZoom(amount){
+  zoomLevel = Math.min(4, Math.max(1, zoomLevel + amount));
+  if (zoomLevel === 1){
+    panX = 0;
+    panY = 0;
+  }
+  updateZoom();
+}
+
+document.getElementById('previousPhoto').addEventListener('click', () => showPhoto(currentPhoto - 1));
+document.getElementById('nextPhoto').addEventListener('click', () => showPhoto(currentPhoto + 1));
+document.getElementById('closeLightbox').addEventListener('click', () => photoLightbox.close());
+
+photoLightbox.addEventListener('close', () => {
+  if (lastPhotoTrigger?.isConnected) lastPhotoTrigger.focus();
+});
+photoLightbox.addEventListener('click', event => {
+  if (event.target === photoLightbox) photoLightbox.close();
+});
+photoLightbox.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft'){
+    event.preventDefault();
+    showPhoto(currentPhoto - 1);
+  } else if (event.key === 'ArrowRight'){
+    event.preventDefault();
+    showPhoto(currentPhoto + 1);
+  }
+});
+
+lightboxViewer.addEventListener('wheel', event => {
+  event.preventDefault();
+  changeZoom(event.deltaY < 0 ? 0.25 : -0.25);
+}, { passive: false });
+
+lightboxImage.addEventListener('click', () => {
+  if (draggedImage){
+    draggedImage = false;
+    return;
+  }
+  if (zoomLevel > 1){
+    zoomLevel = 1;
+    panX = 0;
+    panY = 0;
+  } else {
+    zoomLevel = 2;
+  }
+  updateZoom();
+});
+
+lightboxViewer.addEventListener('pointerdown', event => {
+  pointerStart = { x: event.clientX, y: event.clientY, panX, panY };
+  draggedImage = false;
+  if (zoomLevel > 1 && event.pointerType === 'mouse' && lightboxImage.contains(event.target)){
+    lightboxImage.setPointerCapture(event.pointerId);
+    lightboxImage.style.cursor = 'grabbing';
+  }
+});
+lightboxViewer.addEventListener('pointermove', event => {
+  if (!pointerStart) return;
+  const deltaX = event.clientX - pointerStart.x;
+  const deltaY = event.clientY - pointerStart.y;
+  if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3){
+    draggedImage = true;
+  }
+  if (zoomLevel > 1 && lightboxImage.hasPointerCapture(event.pointerId)){
+    panX = pointerStart.panX + deltaX;
+    panY = pointerStart.panY + deltaY;
+    updateZoom();
+    lightboxImage.style.cursor = 'grabbing';
+  }
+});
+lightboxViewer.addEventListener('pointerup', event => {
+  if (!pointerStart) return;
+  const deltaX = event.clientX - pointerStart.x;
+  if (zoomLevel === 1 && Math.abs(deltaX) > 55){
+    showPhoto(currentPhoto + (deltaX < 0 ? 1 : -1));
+  }
+  pointerStart = null;
+  if (zoomLevel > 1) updateZoom();
+});
