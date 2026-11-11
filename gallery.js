@@ -74,6 +74,10 @@ const artworkPhotoSets = [
   ],
   [
     { src: './photos/AKWE3.png', alt: 'Acquaintance Party poster' }
+  ],
+  [
+    { src: './photos/REGIS1.png', alt: 'REGIS1 poster', width: 3373, height: 4770 },
+    { src: './photos/REGIS2.png', alt: 'REGIS2 poster', width: 4961, height: 7016 }
   ]
 ];
 
@@ -108,12 +112,18 @@ for (let index = 1; index <= 4; index += 1){
       card.appendChild(button);
     } else {
       card.classList.add('gallery-folder');
+      if (photos.some(photo => photo.width && photo.height && photo.width < photo.height)){
+        card.classList.add('gallery-folder-portrait');
+      }
       const stage = document.createElement('div');
       stage.className = 'folder-stage';
       photos.forEach((photo, photoIndex) => {
         const button = document.createElement('button');
         button.className = `folder-photo folder-photo-${photoIndex + 1}`;
         button.type = 'button';
+        if (photo.width && photo.height){
+          button.style.aspectRatio = `${photo.width} / ${photo.height}`;
+        }
         button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}, photo ${photoIndex + 1}: ${photo.alt}`);
 
         const image = document.createElement('img');
