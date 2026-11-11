@@ -35,12 +35,21 @@ if (project.category){
 }
 
 const galleryGrid = document.getElementById('galleryGrid');
-const artworkPhotos = [
-  { src: './photos/VisitBooth1.png', alt: 'Visit Our Booth poster for the Computer Students’ Society' },
-  { src: './photos/VisitBooth2.png', alt: 'Activities poster for the Computer Students’ Society booth' }
+const artworkPhotoSets = [
+  [
+    { src: './photos/VisitBooth1.png', alt: 'Visit Our Booth poster for the Computer Students’ Society' },
+    { src: './photos/VisitBooth2.png', alt: 'Activities poster for the Computer Students’ Society booth' }
+  ],
+  [
+    { src: './photos/AKWE1.png', alt: 'Acquaintance Party dress code poster' },
+    { src: './photos/AKWE2.png', alt: 'Acquaintance Party dress code guidelines poster' }
+  ]
 ];
 
-function openPhotoViewer(index, trigger){
+let activePhotos = artworkPhotoSets[0];
+
+function openPhotoViewer(index, trigger, photos){
+  activePhotos = photos;
   showPhoto(index);
   if (!photoLightbox.open) photoLightbox.showModal();
   lastPhotoTrigger = trigger;
@@ -50,23 +59,23 @@ for (let index = 1; index <= 4; index += 1){
   const card = document.createElement('article');
   card.className = 'gallery-item';
 
-  if (index === 1){
+  if (index <= artworkPhotoSets.length){
     card.classList.add('gallery-folder');
     const stage = document.createElement('div');
     stage.className = 'folder-stage';
-    artworkPhotos.forEach((photo, photoIndex) => {
+    const photos = artworkPhotoSets[index - 1];
+    photos.forEach((photo, photoIndex) => {
       const button = document.createElement('button');
       button.className = `folder-photo folder-photo-${photoIndex + 1}`;
       button.type = 'button';
-      button.setAttribute('aria-label', `Open folder with photo ${photoIndex + 1}: ${photo.alt}`);
+      button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}, photo ${photoIndex + 1}: ${photo.alt}`);
 
       const image = document.createElement('img');
       image.src = photo.src;
       image.alt = '';
       image.loading = 'lazy';
       button.appendChild(image);
-      button.setAttribute('aria-label', `View photo ${photoIndex + 1}: ${photo.alt}`);
-      button.addEventListener('click', () => openPhotoViewer(photoIndex, button));
+      button.addEventListener('click', () => openPhotoViewer(photoIndex, button, photos));
       stage.appendChild(button);
     });
 
@@ -100,11 +109,11 @@ function updateZoom(){
 }
 
 function showPhoto(index){
-  currentPhoto = (index + artworkPhotos.length) % artworkPhotos.length;
-  const photo = artworkPhotos[currentPhoto];
+  currentPhoto = (index + activePhotos.length) % activePhotos.length;
+  const photo = activePhotos[currentPhoto];
   lightboxImage.src = photo.src;
   lightboxImage.alt = photo.alt;
-  lightboxCounter.textContent = `Photo ${currentPhoto + 1} of ${artworkPhotos.length}`;
+  lightboxCounter.textContent = `Photo ${currentPhoto + 1} of ${activePhotos.length}`;
   zoomLevel = 1;
   panX = 0;
   panY = 0;
