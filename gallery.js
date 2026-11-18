@@ -63,25 +63,58 @@ if (project.category){
 }
 
 const galleryGrid = document.getElementById('galleryGrid');
-const artworkPhotoSets = [
-  [
-    { src: './photos/VisitBooth1.png', alt: 'Visit Our Booth poster for the Computer Students’ Society' },
-    { src: './photos/VisitBooth2.png', alt: 'Activities poster for the Computer Students’ Society booth' }
-  ],
-  [
-    { src: './photos/AKWE1.png', alt: 'Acquaintance Party dress code poster' },
-    { src: './photos/AKWE2.png', alt: 'Acquaintance Party dress code guidelines poster' }
-  ],
-  [
-    { src: './photos/AKWE3.png', alt: 'Acquaintance Party poster' }
-  ],
-  [
-    { src: './photos/REGIS1.png', alt: 'REGIS1 poster', width: 3373, height: 4770 },
-    { src: './photos/REGIS2.png', alt: 'REGIS2 poster', width: 4961, height: 7016 }
-  ]
+const artworks = [
+  {
+    layout: 'folder',
+    photos: [
+      { src: './photos/VisitBooth1.png', alt: 'Visit Our Booth poster for the Computer Students’ Society' },
+      { src: './photos/VisitBooth2.png', alt: 'Activities poster for the Computer Students’ Society booth' }
+    ]
+  },
+  {
+    layout: 'folder',
+    photos: [
+      { src: './photos/AKWE1.png', alt: 'Acquaintance Party dress code poster' },
+      { src: './photos/AKWE2.png', alt: 'Acquaintance Party dress code guidelines poster' }
+    ]
+  },
+  {
+    layout: 'single',
+    photos: [
+      { src: './photos/AKWE3.png', alt: 'Acquaintance Party poster' }
+    ]
+  },
+  {
+    layout: 'folder-portrait',
+    photos: [
+      { src: './photos/REGIS1.png', alt: 'Registration poster', width: 3373, height: 4770 },
+      { src: './photos/REGIS2.png', alt: 'Registration details poster', width: 4961, height: 7016 }
+    ]
+  },
+  {
+    layout: 'single-wide',
+    preserveAspectRatio: true,
+    photos: [
+      { src: './photos/AKWE HEADER.png', alt: 'Acquaintance Party header', width: 5040, height: 2835 }
+    ]
+  },
+  {
+    layout: 'single-wide-right',
+    preserveAspectRatio: true,
+    photos: [
+      { src: './photos/CSSUni.png', alt: 'Computer Students’ Society university artwork', width: 18192, height: 12128 }
+    ]
+  },
+  {
+    layout: 'single-portrait',
+    preserveAspectRatio: true,
+    photos: [
+      { src: './photos/CLOSING REGISTRATION.png', alt: 'Closing registration poster', width: 4961, height: 7016 }
+    ]
+  }
 ];
 
-let activePhotos = artworkPhotoSets[0];
+let activePhotos = artworks[0].photos;
 
 function openPhotoViewer(index, trigger, photos){
   activePhotos = photos;
@@ -90,63 +123,72 @@ function openPhotoViewer(index, trigger, photos){
   lastPhotoTrigger = trigger;
 }
 
-for (let index = 1; index <= 4; index += 1){
+function createPhotoButton(photo, photoIndex, artworkNumber, photos, className){
+  const button = document.createElement('button');
+  button.className = className;
+  button.type = 'button';
+  if (photo.width && photo.height){
+    button.style.aspectRatio = `${photo.width} / ${photo.height}`;
+  }
+  const photoLabel = photos.length > 1 ? `, photo ${photoIndex + 1}` : '';
+  button.setAttribute(
+    'aria-label',
+    `View Artwork ${String(artworkNumber).padStart(2, '0')}${photoLabel}: ${photo.alt}`
+  );
+
+  const image = document.createElement('img');
+  image.src = photo.src;
+  image.alt = '';
+  image.loading = 'lazy';
+  button.appendChild(image);
+  button.addEventListener('click', () => openPhotoViewer(photoIndex, button, photos));
+  return button;
+}
+
+artworks.forEach((artwork, artworkIndex) => {
+  const artworkNumber = artworkIndex + 1;
   const card = document.createElement('article');
-  card.className = 'gallery-item';
-
-  if (index <= artworkPhotoSets.length){
-    const photos = artworkPhotoSets[index - 1];
-    if (photos.length === 1){
-      card.classList.add('gallery-single');
-      const button = document.createElement('button');
-      button.className = 'gallery-single-photo';
-      button.type = 'button';
-      button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}: ${photos[0].alt}`);
-
-      const image = document.createElement('img');
-      image.src = photos[0].src;
-      image.alt = '';
-      image.loading = 'lazy';
-      button.appendChild(image);
-      button.addEventListener('click', () => openPhotoViewer(0, button, photos));
-      card.appendChild(button);
-    } else {
-      card.classList.add('gallery-folder');
-      if (photos.some(photo => photo.width && photo.height && photo.width < photo.height)){
-        card.classList.add('gallery-folder-portrait');
-      }
-      const stage = document.createElement('div');
-      stage.className = 'folder-stage';
-      photos.forEach((photo, photoIndex) => {
-        const button = document.createElement('button');
-        button.className = `folder-photo folder-photo-${photoIndex + 1}`;
-        button.type = 'button';
-        if (photo.width && photo.height){
-          button.style.aspectRatio = `${photo.width} / ${photo.height}`;
-        }
-        button.setAttribute('aria-label', `View Artwork ${String(index).padStart(2, '0')}, photo ${photoIndex + 1}: ${photo.alt}`);
-
-        const image = document.createElement('img');
-        image.src = photo.src;
-        image.alt = '';
-        image.loading = 'lazy';
-        button.appendChild(image);
-        button.addEventListener('click', () => openPhotoViewer(photoIndex, button, photos));
-        stage.appendChild(button);
-      });
-
-      card.appendChild(stage);
-    }
+  if (artwork.layout.startsWith('folder')){
+    card.className = `gallery-item gallery-folder gallery-${artwork.layout}`;
   } else {
-    const placeholder = document.createElement('span');
-    const title = document.createElement('strong');
-    title.textContent = `Artwork ${String(index).padStart(2, '0')}`;
-    placeholder.append(title, document.createTextNode('Image coming soon'));
-    card.appendChild(placeholder);
+    card.className = `gallery-item gallery-${artwork.layout}`;
+  }
+  if (artwork.layout.startsWith('single-')){
+    card.classList.add('gallery-single');
+  }
+
+  if (artwork.layout.startsWith('folder')){
+    const stage = document.createElement('div');
+    stage.className = 'folder-stage';
+    artwork.photos.forEach((photo, photoIndex) => {
+      stage.appendChild(createPhotoButton(
+        photo,
+        photoIndex,
+        artworkNumber,
+        artwork.photos,
+        `folder-photo folder-photo-${photoIndex + 1}`
+      ));
+    });
+    card.appendChild(stage);
+  } else {
+    if (artwork.preserveAspectRatio){
+      card.classList.add('gallery-single-natural');
+    }
+    const photoButton = createPhotoButton(
+      artwork.photos[0],
+      0,
+      artworkNumber,
+      artwork.photos,
+      'gallery-single-photo'
+    );
+    if (artwork.layout === 'single-portrait'){
+      photoButton.style.removeProperty('aspect-ratio');
+    }
+    card.appendChild(photoButton);
   }
 
   galleryGrid.appendChild(card);
-}
+});
 
 const photoLightbox = document.getElementById('photoLightbox');
 const lightboxImage = document.getElementById('lightboxImage');
